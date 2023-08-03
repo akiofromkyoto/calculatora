@@ -33,26 +33,27 @@ class Calculator {
         }
 
         // Get current and previous values
-        let operationValue;
+        let operationValue1;
+        let operationValue2;
         let previous = +this.previousOperationText.innerText.split(" ")[0];
         let current = +this.currentOperationText.innerText;
 
         switch (operation) {
             case "+":
-                operationValue = previous + current;
-                this.updateScreen(operationValue, operation, current, previous);
+                operationValue1 = previous + current;
+                this.updateScreen(operationValue1, operation, current, previous);
                 break;
             case "-":
-                operationValue = previous - current;
-                this.updateScreen(operationValue, operation, current, previous);
+                operationValue1 = previous - current;
+                this.updateScreen(operationValue1, operation, current, previous);
                 break;
             case "*":
-                operationValue = previous * current;
-                this.updateScreen(operationValue, operation, current, previous);
+                operationValue1 = previous * current;
+                this.updateScreen(operationValue1, operation, current, previous);
                 break;
             case "/":
-                operationValue = previous / current;
-                this.updateScreen(operationValue, operation, current, previous);
+                operationValue1 = previous / current;
+                this.updateScreen(operationValue1, operation, current, previous);
                 break;
             case "DEL":
                 this.processDelOperator();
@@ -64,7 +65,12 @@ class Calculator {
                 this.processClearOperator();
                 break;
             case "=":
-                this.processEqualOperator();
+                this.processResultOperator(
+                    previous,
+                    current,
+                    this.previousOperationText.innerText.split(" ")[1],
+                    operationValue1
+                );
                 break;
             default:
                 return;
@@ -127,6 +133,32 @@ class Calculator {
 
         this.processOperation(operation);
     }
+
+    processResultOperator(operationValue1, operationValue2, operation) {
+        let result;
+    
+        switch (operation) {
+            case "+":
+                result = operationValue1 + operationValue2;
+                break;
+            case "-":
+                result = operationValue1 - operationValue2;
+                break;
+            case "*":
+                result = operationValue1 * operationValue2;
+                break;
+            case "/":
+                result = operationValue1 / operationValue2;
+                break;
+            default:
+                return;
+        }
+    
+        // Display the result on the calculator screen
+        this.previousOperationText.innerText = `${operationValue1} ${operation} ${operationValue2} =`;
+        this.currentOperationText.innerText = `${result}`;
+    }
+    
 }
 
 const calc = new Calculator(previousOperationText, currentOperationText);
